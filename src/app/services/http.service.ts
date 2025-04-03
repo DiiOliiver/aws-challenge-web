@@ -31,4 +31,9 @@ export class ApiService {
     const response = await this.axiosInstance.delete(`/${routeName}/${id}`);
     return response.data;
   }
+
+  protected async deleteList(routeName: string, data: unknown) {
+    const response = await this.axiosInstance.post(`/${routeName}/delete`, data);
+    return response.data;
+  }
 }

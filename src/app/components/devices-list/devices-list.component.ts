@@ -7,6 +7,7 @@ import { DeviceService } from '../../services/device.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   standalone: true,
@@ -25,6 +26,7 @@ export class DevicesListComponent implements OnInit {
   devices = new MatTableDataSource<any>([]);
   selectedDevices = new Set<number>();
   private deviceService: DeviceService = inject(DeviceService)
+  private alertService: AlertService = inject(AlertService)
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
@@ -45,16 +47,24 @@ export class DevicesListComponent implements OnInit {
   }
 
   deleteSelected() {
-    console.log('Deletando dispositivos');
+    this.alertService.confirm('Are you sure?', 'Do you want to delete this device?')
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.deleteDevices();
+        }
+      })
+  }
+
+  private deleteDevices() {
     const data = Array.from(this.selectedDevices)
     this.deviceService.deleteListDevice(data)
-      .then(value => {
-        console.log("Dispositivo removido")
+      .catch(({ response }) => {
+        this.alertService.error(response.data.error)
       })
-      .catch(reason => {
-        console.log("Dispositivo não foi removido")
+      .finally(async () => {
+        this.selectedDevices.clear();
+        await this.loadDevices();
       })
-    this.selectedDevices.clear();
   }
 
   applyFilter(event: Event) {

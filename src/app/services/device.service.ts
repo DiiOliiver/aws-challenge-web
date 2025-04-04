@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {ApiService} from './http.service';
-import {of} from 'rxjs';
+import { ApiService } from './http.service';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import axios, { AxiosInstance } from 'axios';
 import { environment } from '../../environments/environment';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
   private axiosInstance: AxiosInstance;
+  private alertService: AlertService = inject(AlertService)
 
   constructor() {
     this.axiosInstance = axios.create({

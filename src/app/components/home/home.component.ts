@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TabsComponent } from '../tabs/tabs.component';
 import { CommonModule } from '@angular/common';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   standalone: true,

@@ -1,13 +1,13 @@
-import {Component, inject, OnInit, ViewChild} from '@angular/core';
-import {CommonModule, NgIf} from '@angular/common';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { CategoryService } from '../../services/category.service';
-import {MatInput, MatInputModule, MatLabel} from '@angular/material/input';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatFormFieldModule} from '@angular/material/form-field';
-
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   standalone: true,
@@ -26,6 +26,7 @@ export class CategoriesListComponent implements OnInit {
   categories = new MatTableDataSource<any>([]);
   selectedCategories = new Set<number>();
   private categoryService: CategoryService = inject(CategoryService)
+  private alertService: AlertService = inject(AlertService)
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
@@ -46,16 +47,23 @@ export class CategoriesListComponent implements OnInit {
   }
 
   deleteSelected() {
-    console.log('Deletando categorias');
+    this.alertService.confirm('Are you sure?', 'Do you want to delete this device?')
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.deleteCategories();
+        }
+      })
+  }
+
+  private deleteCategories() {
     const data = Array.from(this.selectedCategories)
-    this.categoryService.deleteListCategory(data)
-      .then(value => {
-        console.log("Categoria removida")
+    this.categoryService.deleteListCategory(data).catch(({ response }) => {
+        this.alertService.error(response.data.error)
       })
-      .catch(reason => {
-        console.log("Categoria não foi removido")
+      .finally(async () => {
+        this.selectedCategories.clear();
+        await this.loadCategories();
       })
-    this.selectedCategories.clear();
   }
 
   applyFilter(event: Event) {

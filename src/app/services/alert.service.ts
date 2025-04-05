@@ -15,19 +15,18 @@ export class AlertService {
     });
   }
 
-  error(message: string) {
+  error(data: { error: string, messages: string[] }, messageDefault: string = '') {
+    let messageBody = ''
+    if (data?.messages?.length) {
+      data.messages.forEach((value: string) => messageBody+= `• ${value}<br/>`)
+    } else {
+      messageBody = `• ${data.error ?? messageDefault}`;
+    }
+
     Swal.fire({
       icon: 'error',
       title: 'Oops...',
-      text: message,
-    });
-  }
-
-  warning(message: string) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Warning!',
-      text: message,
+      html: `<p>${messageBody}</p>`,
     });
   }
 

@@ -19,10 +19,6 @@ export class DeviceService extends ApiService {
     return this.create('devices', data);
   }
 
-  deleteDevice(id: number) {
-    return this.delete('devices', id);
-  }
-
   deleteListDevice(data: number[]) {
     return this.deleteList('devices', { ids: data});
   }

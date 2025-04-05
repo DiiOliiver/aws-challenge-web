@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AlertService } from '../../services/alert.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CategoryFormDialogComponent } from '../category-form-dialog/category-form-dialog.component';
 
 @Component({
   standalone: true,
@@ -22,11 +24,12 @@ import { AlertService } from '../../services/alert.service';
   styleUrl: './categories-list.component.scss'
 })
 export class CategoriesListComponent implements OnInit {
-  displayedColumns: string[] = ['select', 'name'];
+  displayedColumns: string[] = ['select', 'name', 'total'];
   categories = new MatTableDataSource<any>([]);
   selectedCategories = new Set<number>();
   private categoryService: CategoryService = inject(CategoryService)
   private alertService: AlertService = inject(AlertService)
+  private dialog = inject(MatDialog);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
@@ -58,12 +61,12 @@ export class CategoriesListComponent implements OnInit {
   private deleteCategories() {
     const data = Array.from(this.selectedCategories)
     this.categoryService.deleteListCategory(data).catch(({ response }) => {
-        this.alertService.error(response.data.error)
-      })
-      .finally(async () => {
-        this.selectedCategories.clear();
-        await this.loadCategories();
-      })
+      this.alertService.error(response.data, 'Error delete categories')
+    })
+    .finally(async () => {
+      this.selectedCategories.clear();
+      await this.loadCategories();
+    })
   }
 
   applyFilter(event: Event) {
@@ -73,5 +76,15 @@ export class CategoriesListComponent implements OnInit {
     if (this.categories.paginator) {
       this.categories.paginator.firstPage();
     }
+  }
+
+  openCategoryDialog() {
+    const dialogRef = this.dialog.open(CategoryFormDialogComponent);
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        await this.loadCategories();
+      }
+    });
   }
 }

@@ -19,10 +19,6 @@ export class CategoryService extends ApiService {
     return this.create('categories', data);
   }
 
-  deleteCategory(id: number) {
-    return this.delete('categories', id);
-  }
-
   deleteListCategory(data: number[]) {
     return this.deleteList('categories', { ids: data});
   }

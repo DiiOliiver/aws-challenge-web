@@ -1,0 +1,32 @@
+<form [formGroup]="form" (ngSubmit)="create()" class="form-container">
+  <h3>Create new category</h3>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Category</mat-label>
+    <mat-select formControlName="category">
+      <mat-option>-- None --</mat-option>
+      <mat-option
+        *ngFor="let category of categories; index as i;" value="{{category.id}}"
+      >
+        {{ category.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Color</mat-label>
+    <input matInput formControlName="color" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Part-number</mat-label>
+    <input matInput formControlName="partNumber" />
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-flat-button type="submit" [disabled]="form.invalid">Create new</button>
+  </div>
+</form>

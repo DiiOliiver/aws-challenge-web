@@ -1,4 +1,4 @@
-<mat-tab-group class="">
+<mat-tab-group [(selectedIndex)]="selectedIndexChange" (selectedTabChange)="changeSelected()">
   <mat-tab label="Devices">
     <app-devices-list></app-devices-list>
   </mat-tab>

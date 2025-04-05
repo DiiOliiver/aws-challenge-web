@@ -11,4 +11,10 @@ import { CategoriesListComponent } from '../categories-list/categories-list.comp
   templateUrl: './tabs.component.html',
   styleUrl: './tabs.component.scss',
 })
-export class TabsComponent {}
+export class TabsComponent {
+  selectedIndexChange: number = Number(localStorage.getItem('tabSelectedIndex') || 0)
+
+  changeSelected() {
+    localStorage.setItem('tabSelectedIndex', String(this.selectedIndexChange))
+  }
+}

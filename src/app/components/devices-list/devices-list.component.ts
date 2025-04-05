@@ -8,6 +8,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AlertService } from '../../services/alert.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DeviceFormDialogComponent } from '../device-form-dialog/device-form-dialog.component';
 
 @Component({
   standalone: true,
@@ -22,11 +24,12 @@ import { AlertService } from '../../services/alert.service';
   styleUrl: './devices-list.component.scss'
 })
 export class DevicesListComponent implements OnInit {
-  displayedColumns: string[] = ['select', 'name', 'color', 'partNumber', 'status'];
+  displayedColumns: string[] = ['select', 'name', 'category', 'color', 'partNumber'];
   devices = new MatTableDataSource<any>([]);
   selectedDevices = new Set<number>();
   private deviceService: DeviceService = inject(DeviceService)
   private alertService: AlertService = inject(AlertService)
+  private dialog = inject(MatDialog);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
@@ -59,7 +62,7 @@ export class DevicesListComponent implements OnInit {
     const data = Array.from(this.selectedDevices)
     this.deviceService.deleteListDevice(data)
       .catch(({ response }) => {
-        this.alertService.error(response.data.error)
+        this.alertService.error(response.data, 'Error delete devices')
       })
       .finally(async () => {
         this.selectedDevices.clear();
@@ -74,5 +77,15 @@ export class DevicesListComponent implements OnInit {
     if (this.devices.paginator) {
       this.devices.paginator.firstPage();
     }
+  }
+
+  openDeviceDialog() {
+    const dialogRef = this.dialog.open(DeviceFormDialogComponent);
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        await this.loadDevices();
+      }
+    });
   }
 }

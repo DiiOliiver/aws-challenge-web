@@ -1,59 +1,34 @@
-# AwsChallengeWeb
+# Case Técnico: Gerenciador de dispositivos
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
+## Stack utilizada
 
-## Development server
+**Front-end:** Node v22.14.0 e Angular v19.2.5
 
-To start a local development server, run:
+## Instalação
 
-```bash
-ng serve
+#### 1 - Clonando o projeto
+```powershell
+    git clone https://github.com/DiiOliiver/aws-challenge-web.git
+    cd api
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+#### 2 - Apontando caminho para o backend
+Dentro do arquivo src/environments/environment.development.ts\
+encontrará o seguinte bloco de código, altere a porta conforme definido na api.
+```text
 
-## Code scaffolding
+    export const environment = {
+        production: false,
+        apiUrl: 'http://localhost:8081'
+    };
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
 ```
+Nota 1: Para clonar e configurar o backend, acesse o link [aws-challenge-api](https://github.com/DiiOliiver/aws-challenge-api/blob/main/README.md).
+Nota 2: Para acessar o front-end, necessário começar com o clone e configuração da api.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
+#### 3 - Acessando e levantando o projeto:
+Após a finalização do levantamento da api, execute no terminal do projeto aws-challenge-web o comando
+```powershell
+    npm run dev
 ```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Nota: O projeto front-end vai ser levantado em http://localhost:4200
